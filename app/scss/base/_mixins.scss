@@ -1,0 +1,23 @@
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+@mixin border-radius-right($radius) {
+  -webkit-border-top-right-radius: $radius;
+  -webkit-border-bottom-right-radius: $radius;
+  -moz-border-radius-topright: $radius;
+  -moz-border-radius-bottomright: $radius;
+  -moz-border-radius-topright: $radius;
+  -moz-border-radius-bottomright: $radius;
+}
+@mixin m-height($height) {
+  height: $height;
+  line-height: $height - 1px;
+}
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

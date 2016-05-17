@@ -1,5 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HeaderComponent from './components/HeaderComponent';
+import QuestionnaireComponent from './components/QuestionnaireComponent';
 
-ReactDOM.render(<HeaderComponent />, document.getElementById('app'));
+// static mock data
+import { questions } from './mocks/questions';
+
+ReactDOM.render(
+  <QuestionnaireComponent questions={questions} />,
+  document.getElementById('app')
+);
