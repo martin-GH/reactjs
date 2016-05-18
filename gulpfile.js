@@ -5,11 +5,11 @@ var source = require('vinyl-source-stream');
 var babelify = require('babelify');
 var watchify = require('watchify');
 var browserify = require('browserify');
-var browserSync = require('browser-sync').create();
 var autoprefixer = require('gulp-autoprefixer');
+
 var dir = {
-  source: 'app/',
-  dest: 'dist/',
+  source: 'client/',
+  dest: 'public/',
 }
 var bootstrapSass = {
   in: './node_modules/bootstrap-sass/'
@@ -34,7 +34,7 @@ var scss = {
 };
 
 watchify.args.debug = true;
-var bundler = watchify(browserify('./app/main.js', watchify.args));
+var bundler = watchify(browserify('./client/main.js', watchify.args));
 
 bundler.transform(babelify.configure({
   presets: ["es2015", "react"]
@@ -49,8 +49,7 @@ function bundle() {
       this.emit("end");
     })
     .pipe(source('bundle.js'))
-    .pipe(gulp.dest(dir.dest))
-    .pipe(browserSync.stream({once: true}));
+    .pipe(gulp.dest(dir.dest));
 }
 
 gulp.task('bundle', function () {
@@ -58,8 +57,7 @@ gulp.task('bundle', function () {
 });
 
 gulp.task('fonts', function() {
-  return gulp
-    .src(fonts.in)
+  return gulp.src(fonts.in)
     .pipe(gulp.dest(fonts.out));
 });
 
@@ -67,18 +65,9 @@ gulp.task('sass', ['fonts'], function() {
   return gulp.src(scss.in)
     .pipe(sass(scss.sassOpts).on('error', sass.logError))
     .pipe(autoprefixer())
-    .pipe(gulp.dest(scss.out))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest(scss.out));
 });
 
 gulp.task('default', ['bundle','sass'], function () {
-  browserSync.init({
-    server: "./",
-    browser: 'google-chrome'
-  });
-
   gulp.watch(scss.watch, ['sass']);
-  gulp.watch('index.html', function() {
-    browserSync.reload();
-  })
 });

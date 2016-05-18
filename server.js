@@ -1,18 +1,26 @@
-var path = require('path');
-var express = require('express');
-var app = express();
-var port = process.env.PORT || 3000;
+import express from 'express';
+import questions from './server/database/questions';
 
-app.use(express.static(__dirname + '/public'));
+const port = 3000;
+const app = express();
+const router = express.Router();
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  res.sendFile('index.html', {
+    root: __dirname + '/public/'
+  });
 });
 
-app.listen(port, function onAppListening(err) {
-  if (err) {
-    console.error(err);
-  } else {
-    console.info('==> Dev server listening on port %s', port);
-  }
+router.route('/get-initial-data')
+  .get((req, res) => {
+
+    res.json(questions);
+  });
+
+app.use('/api', router);
+
+app.listen(port, () => {
+  console.log('Server listening at 3000');
 });
