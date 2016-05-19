@@ -1,6 +1,7 @@
 import React from 'react';
 import AppStore from '../stores/AppStore';
 import AppActions from '../actions/AppActions';
+import LoaderComponent from '../components/LoaderComponent';
 import QuestionComponent from '../components/QuestionComponent';
 import BrowseComponent from '../components/BrowseComponent';
 import ButtonComponent from '../components/ButtonComponent';
@@ -30,45 +31,51 @@ export default class QuestionnaireComponent extends React.Component {
     this.setState(AppStore.getData());
   }
 
+  rawMarkup() {
+    return {
+      __html: this.state.content.body
+    };
+  }
+
   render() {
-    let component;
+    let component = <LoaderComponent text="Loading..." />;
 
     switch (this.state.type) {
       case 'page':
         component = (
-          <div className="row">
-            <div className="col-sm-6 col-sm-offset-3">
-              <div className="row">
-                <BrowseComponent handler={AppActions.browseBack.bind(null)} icon="left" />
-                <div className="col-sm-8 page">{this.state.content.body}</div>
-                <BrowseComponent handler={AppActions.browseForward.bind(null)} icon="right" />
-              </div>
+            <div>
+              <div dangerouslySetInnerHTML={this.rawMarkup()}></div>
+              <ButtonComponent
+                handler={AppActions.restartQuestionnaire.bind(null)}
+                label="nochmal" />
             </div>
-          </div>
         );
         break;
 
       case 'question':
         component = (
-          <div className="row">
-            <div className="col-sm-6 col-sm-offset-3">
-              <div className="row">
-                <BrowseComponent handler={AppActions.browseBack.bind(null)} icon="left" />
-                <QuestionComponent {...this.state} />
-                <BrowseComponent handler={AppActions.browseForward.bind(null)} icon="right" />
-              </div>
-              <div className="row">
-                <ButtonComponent handler={AppActions.submitAnswers.bind(null)} />
-              </div>
-            </div>
+            <div>
+              <BrowseComponent
+                handler={AppActions.browseBack.bind(null, this.state.browseButtonState.back)}
+                disabled={this.state.browseButtonState.back}
+                icon="left" />
+
+              <QuestionComponent {...this.state} />
+
+              <BrowseComponent
+                handler={AppActions.browseForward.bind(null, this.state.browseButtonState.forward)}
+                disabled={this.state.browseButtonState.forward}
+                icon="right" />
+
+              <div className="clearfix"></div>
+
+              <ButtonComponent
+                handler={AppActions.submitAnswers.bind(null)}
+                disabled={this.state.submitButtonState}
+                label="weiter" />
           </div>
         );
         break;
-
-      default:
-        component = (
-          <div>Loading ...</div>
-        );
     }
 
     return component;

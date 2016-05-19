@@ -16,10 +16,12 @@ export default {
     });
   },
 
-  browseForward() {
-    dispatch({
-      actionType: Constants.BROWSE_FORWARD,
-    });
+  browseForward(disabled) {
+    if (disabled !== 'disabled') {
+      dispatch({
+        actionType: Constants.BROWSE_FORWARD,
+      });
+    }
   },
 
   toggleCheckbox(value) {
@@ -32,6 +34,12 @@ export default {
   submitAnswers() {
     dispatch({
       actionType: Constants.SUBMIT_ANSWERS,
+    });
+  },
+
+  restartQuestionnaire() {
+    dispatch({
+      actionType: Constants.RESTART_QUESTIONNAIRE,
     });
   }
 }

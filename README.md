@@ -1,3 +1,12 @@
+#Setup
+
+```bash
+npm install
+npm start
+```
+
+open browser to http://localhost:3000
+
 # Questionnaire
 Create a Questionnaire Slider with Step Logic
 

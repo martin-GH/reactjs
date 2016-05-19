@@ -12,6 +12,8 @@ export const getInitialData = () => {
         return console.error(err);
       }
 
-      AppActions.getInitialData(response.body);
+      window.setTimeout(() => {
+        AppActions.getInitialData(response.body);
+      }, 1000);
     });
 }

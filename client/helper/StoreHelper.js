@@ -3,24 +3,29 @@ const StoreHelper = {
   step: {},
   content: {},
   currentStepIndex: 0,
-  checkboxStates: null,
+  submitButtonState: '',
+  browseButtonState: {
+    back: 'disabled',
+    forward: '',
+  },
 
   initData(data) {
     this.setStepsMap(data);
-    this.prepareStepData();
+    this.initStepData();
     this.initCheckboxStates();
+    this.initSubmitButtonState();
   },
 
   getData() {
-    this.prepareStepData();
-
     const data = {
       type: this.getStepType(),
       content: this.getContentByStepType(),
       currentStepIndex: this.currentStepIndex,
+      submitButtonState: this.submitButtonState,
+      browseButtonState: this.browseButtonState
     };
 
-    console.log('StoreHelper', this.step);
+    //console.log(data);
 
     return data;
   },
@@ -33,7 +38,7 @@ const StoreHelper = {
     }
   },
 
-  prepareStepData() {
+  initStepData() {
     const uuid = this.getUuidByIndex(this.currentStepIndex);
     let step = this.stepsMap[this.currentStepIndex][uuid];
 
@@ -41,6 +46,13 @@ const StoreHelper = {
       data: step,
       type: step.type
     };
+  },
+
+  prepareData() {
+    this.initStepData();
+    this.initCheckboxStates();
+    this.initSubmitButtonState();
+    this.toggleBrowseButtonState();
   },
 
   getUuidByIndex(index) {
@@ -81,7 +93,9 @@ const StoreHelper = {
       uuid: this.step.data.uuid,
       title: this.step.data.title,
       required: this.step.data.required,
+      requiredText: this.step.data.required_text,
       multiple: this.step.data.multi,
+      autoJump: this.step.data.auto_jump,
     };
   },
 
@@ -101,31 +115,25 @@ const StoreHelper = {
     }
   },
 
+  resetStepIndex() {
+    this.currentStepIndex = 0;
+  },
+
   initCheckboxStates() {
     if (this.step.type === 'question') {
-      this.checkboxStates = this.step.data.answers.map((answer) => {
+      this.step.data.answers.map((answer) => {
         return Object.assign(answer, {checked: false});
       });
     }
   },
 
   toggleCheckbox(value) {
-    this.step.data.answers = this.step.data.answers.map((item) => {
+    this.step.data.answers.map((item) => {
       if (item.uuid === value) {
         item.checked = !item.checked;
       }
       return item;
     });
-  },
-
-  goPrev() {
-    this.decreaseStepIndex();
-    this.initCheckboxStates();
-  },
-
-  goNext() {
-    this.increaseStepIndex();
-    this.initCheckboxStates();
   },
 
   getNextUuid() {
@@ -150,7 +158,45 @@ const StoreHelper = {
         }
       })
     } else {
-      this.goNext();
+      this.increaseStepIndex();
+    }
+  },
+
+  initSubmitButtonState() {
+    this.submitButtonState = '';
+
+    if (this.step.data.required) {
+      this.submitButtonState = 'disabled';
+    }
+  },
+
+  toggleSubmitButtonState() {
+    this.step.data.answers.map((item) => {
+      if (item.checked) {
+        this.submitButtonState = '';
+      }
+    });
+  },
+
+  toggleBrowseButtonState() {
+    const numSteps = this.stepsMap.length - 1;
+    this.browseButtonState = {
+      back: 'disabled',
+      forward: ''
+    };
+
+    if (this.currentStepIndex > 0 && this.currentStepIndex <= numSteps) {
+      this.browseButtonState = {
+        back: '',
+        forward: ''
+      };
+
+      if (this.step.data.required || this.currentStepIndex === numSteps) {
+        this.browseButtonState = {
+          back: '',
+          forward: 'disabled'
+        };
+      }
     }
   }
 };

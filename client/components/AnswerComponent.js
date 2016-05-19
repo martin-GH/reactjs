@@ -8,7 +8,7 @@ export default (props) => {
         <span className={`glyphicon glyphicon-${props.checkbox}`}/>
       </div>
       <div className="answerContent">{props.answer.title}</div>
-      <div className="clearfix"/>
+      <div className="clearfix"></div>
     </div>
   );
 }

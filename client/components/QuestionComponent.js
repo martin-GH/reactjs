@@ -3,7 +3,7 @@ import AnswerComponent from '../components/AnswerComponent';
 
 export default (props) => {
   return (
-    <div className="col-sm-8 question">
+    <div className="questionComponent">
       <div className="questionTitle">{props.content.question.title}</div>
       <div className="answersContainer">
         {renderAnswers(props.content.answers)}

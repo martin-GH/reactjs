@@ -25,29 +25,34 @@ const AppStore = Object.assign(EventEmitter.prototype, {
   dispatcherIndex: register((action) => {
     switch(action.actionType) {
       case Constants.INITIALIZE:
-        console.log('Store.dispatcherIndex', action.response);
-
         StoreHelper.initData(action.response);
         break;
 
       case Constants.BROWSE_FORWARD:
-        StoreHelper.goNext();
+        StoreHelper.increaseStepIndex();
+        StoreHelper.prepareData();
         break;
 
       case Constants.BROWSE_BACK:
-        StoreHelper.goPrev();
+        StoreHelper.decreaseStepIndex();
+        StoreHelper.prepareData();
         break;
 
       case Constants.TOGGLE_CHECKBOX:
         StoreHelper.toggleCheckbox(action.value);
+        StoreHelper.initSubmitButtonState();
+        StoreHelper.toggleSubmitButtonState();
         break;
 
       case Constants.SUBMIT_ANSWERS:
         StoreHelper.submitAnswers();
+        StoreHelper.prepareData();
         break;
 
-      default:
-        return true;
+      case Constants.RESTART_QUESTIONNAIRE: {
+        StoreHelper.resetStepIndex();
+        StoreHelper.prepareData();
+      }
     }
 
     AppStore.emitChange();
