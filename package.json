@@ -30,7 +30,6 @@
     "browser-sync": "^2.12.8",
     "browserify": "^13.0.1",
     "express": "^4.13.4",
-    "fontawesome": "^4.5.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-babel": "^6.1.2",
@@ -38,7 +37,6 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
-    "node-font-awesome": "^1.0.2",
     "superagent": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
